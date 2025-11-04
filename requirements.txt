@@ -1,0 +1,14 @@
+# === API Server===
+fastapi
+uvicorn[standard]
+
+# === Database (SQLAlchemy) & Driver ===
+sqlalchemy
+psycopg2-binary
+
+# === ETL & Data Processing ===
+pandas
+requests
+
+# === Machine Learning ===
+scikit-learn
