@@ -1,0 +1,27 @@
+# === Python Cache & Artifacts ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ===Virtual Environments ==
+venv/
+.venv/
+
+# === Local Database Files ===
+*.db
+*.sqlite3
+
+# === ML Models ===
+*.pkl
+*.h5
+*.joblib
+
+# === Secrets & Environment Files ===
+.env
+*.env
+.env.*
+
+# === IDE & OS Files ===
+.vscode/
+.DS_Store
+*.swp
