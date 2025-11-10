@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
 # --- 1. Import database setup ---
-from .database import SessionLocal, Weather, engine
+from database import SessionLocal, Weather, engine
 
 # --- 2. Define Model Path ---
 MODEL_PATH = "model.pkl"
