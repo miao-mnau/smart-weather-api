@@ -6,27 +6,37 @@ import database
 
 from database import SessionLocal, Weather
 from sqlalchemy.orm import Session
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from datetime import datetime
+from contextlib import asynccontextmanager
 
-# --- Startup Tasks ---
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+   
+    print("API Server is starting up...")
 
-print("API Server is  starting up...")
+    # 1. Create database tables
+    print("Database tables verified/created.")
+    database.create_db_and_tables()
 
-# 1. Create database tables
-database.create_db_and_tables()
-print("Database tables verified/created.")
-
-# 2. Train/Load the model
-print("Executing startup model training...")
-model.train_model()
-print("Startup model training complete.")
+    # 2. Train/Load the model
+    print("Executing startup model training...")
+    model.train_model()
+    print("Startup model training complete.")
+    
+    print("Lifespan startup complete. Server is ready.")
+    
+    yield 
+    
+    # --- When server closed ---
+    print("API Server is shutting down...")
 
 # --- Create FastAPI "app" instance ---
 app = FastAPI(
     title="Smart Weather API",
     description="A FastAPI project to extract, store, and predict weather data.",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # ---Database Dependency ---
@@ -57,9 +67,10 @@ def get_weather_prediction(future_time: datetime):
 
     if prediction is None:
     
-        return {
-            "error": "Model is not trained or model file (model.pkl) not found."
-        }
+        raise HTTPException(
+        status_code=503, # 503 Service Unavailable
+        detail="Model is not trained (data is insufficient) or model file not found."
+    )
     return {
         "predicted_temperature": prediction,
         "future_time": future_time
