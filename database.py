@@ -4,6 +4,7 @@ import os
 from datetime import datetime, timezone
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from pydantic import BaseModel
 
 # --- 1. Database URL configuration ---
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./local_weather.db")
@@ -36,6 +37,25 @@ class Weather(Base):
 # --- 6. Create Tables Function ---
 def create_db_and_tables():
     Base.metadata.create_all(bind=engine)
+
+# Pydantic Model
+class WeatherRead(BaseModel):
+    """
+    This Pydantic model defines the "public" shape of our Weather data.
+    It ensures we *only* return the fields we want clients to see.
+    """
+
+    # We list *only* the fields that are safe to show the public.
+    city: str
+    timestamp: datetime.datetime
+    temperature: float
+    humidity: float
+
+    # This special config tells Pydantic to be "compatible"
+    # with our SQLAlchemy database models.
+    class Config:
+        orm_mode = True 
+        # (Note: In Pydantic v2, this might be 'from_attributes = True')
 
 # ---Main execution block ---
 if __name__ == "__main__":

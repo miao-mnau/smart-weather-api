@@ -4,11 +4,12 @@ from fastapi import FastAPI
 import model
 import database
 
-from database import SessionLocal, Weather
+from database import SessionLocal, Weather, WeatherRead
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 from datetime import datetime
 from contextlib import asynccontextmanager
+from typing import List
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -47,7 +48,7 @@ def get_db():
     finally:
         db.close()
 # --- API Endpoints (Routes) ---
-@app.get("/api/v1/history")
+@app.get("/api/v1/history", response_model=List[WeatherRead])
 def get_weather_history(db: Session = Depends(get_db)):
     """
     Fetches the most recent weather data entries from the database.
