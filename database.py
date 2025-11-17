@@ -47,7 +47,7 @@ class WeatherRead(BaseModel):
 
     # We list *only* the fields that are safe to show the public.
     city: str
-    timestamp: datetime.datetime
+    timestamp: datetime
     temperature: float
     humidity: float
 
