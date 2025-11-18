@@ -1,0 +1,22 @@
+# === File: docker-compose.yml ===
+
+version: '3.8'
+
+services:
+# Service 1: The API Server
+  api-server:
+    # Build the image from the current directory (.) containing the Dockerfile
+    build: .
+    container_name: weather-api
+    # Map port 8000 on your laptop to port 8000 inside the container
+    ports:
+      - "8000:8000"
+    # Volume Mapping
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Service 2: The ETL Worker
+  etl-worker:
+    build: .
+    container_name: weather-worker

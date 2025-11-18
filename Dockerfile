@@ -1,7 +1,7 @@
 # === File: Dockerfile ===
 
 # --- Stage 1: Base Image ---
-FROM python:3.13
+FROM python:3.10-slim
 
 # --- Stage 2: Set Working Directory ---
 WORKDIR /app
